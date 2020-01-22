@@ -26,21 +26,30 @@ func main() {
 	outFile.SetCellValue("Лист1", "G1", "ФИО жильцов")
 	outFile.SetCellValue("Лист1", "H1", "собственника")
 	outFile.SetCellValue("Лист1", "i1", "признак прописнного")
-
+	outFile.SetColWidth("Лист1", "A", "A", 5)
+	outFile.SetColWidth("Лист1", "B", "C", 20)
+	outFile.SetColWidth("Лист1", "D", "E", 14)
+	outFile.SetColWidth("Лист1", "G", "G", 40)
+	outFile.SetColWidth("Лист1", "H", "I", 19)
 	var liv []string
 	var sob []string
 	var adr []string
 	var nstr int = 2
 	rows, err := inputFile.GetRows("Лист1")
-	rows[1][1]
+
 	for _, row := range rows {
 		liv = strings.Split(row[6], "\n")
+		if liv[0] == "Проживающие" {
+			continue
+		}
 		sob = strings.Split(row[4], "\n")
 		adr = strings.Split(row[1], ",")
 		sort.Strings(sob)
 		sort.Strings(liv)
-		for i := 0; i <len(sob); i++ {
-			if len(sob[i])<2{break}
+		for i := 0; i < len(sob); i++ {
+			if len(sob[i]) < 2 {
+				continue
+			}
 			outFile.SetCellValue("Лист1", "B"+strconv.Itoa(nstr), adr[0])
 			outFile.SetCellValue("Лист1", "C"+strconv.Itoa(nstr), adr[1])
 			outFile.SetCellValue("Лист1", "D"+strconv.Itoa(nstr), adr[2])
@@ -54,22 +63,24 @@ func main() {
 		}
 
 		for i := 0; i < len(liv); i++ {
-			if len(liv[i])<2{break}
-			if itemExists(sob, liv[i])  {
+			if len(liv[i]) < 2 {
+				continue
+			}
+			if itemExists(sob, liv[i]) {
 
 			} else {
 
-			outFile.SetCellValue("Лист1", "B"+strconv.Itoa(nstr), adr[0])
-			outFile.SetCellValue("Лист1", "C"+strconv.Itoa(nstr), adr[1])
-			outFile.SetCellValue("Лист1", "D"+strconv.Itoa(nstr), adr[2])
-			outFile.SetCellValue("Лист1", "E"+strconv.Itoa(nstr), adr[3])
-			outFile.SetCellValue("Лист1", "G"+strconv.Itoa(nstr), liv[i])
-			outFile.SetCellValue("Лист1", "I"+strconv.Itoa(nstr), "1")
-			if itemExists(sob, liv[i])  {
-				outFile.SetCellValue("Лист1", "H"+strconv.Itoa(nstr), "1")
+				outFile.SetCellValue("Лист1", "B"+strconv.Itoa(nstr), adr[0])
+				outFile.SetCellValue("Лист1", "C"+strconv.Itoa(nstr), adr[1])
+				outFile.SetCellValue("Лист1", "D"+strconv.Itoa(nstr), adr[2])
+				outFile.SetCellValue("Лист1", "E"+strconv.Itoa(nstr), adr[3])
+				outFile.SetCellValue("Лист1", "G"+strconv.Itoa(nstr), liv[i])
+				outFile.SetCellValue("Лист1", "I"+strconv.Itoa(nstr), "1")
+				if itemExists(sob, liv[i]) {
+					outFile.SetCellValue("Лист1", "H"+strconv.Itoa(nstr), "1")
+				}
+				nstr++
 			}
-			nstr++
-		}
 		}
 	}
 	outFile.SetActiveSheet(index)
@@ -77,7 +88,6 @@ func main() {
 		println(err.Error())
 	}
 }
-
 
 func itemExists(slice interface{}, item interface{}) bool {
 	s := reflect.ValueOf(slice)
