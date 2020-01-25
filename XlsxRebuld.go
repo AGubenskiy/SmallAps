@@ -23,11 +23,12 @@ func main() {
 	outFile.SetCellValue("Лист1", "C1", "Улица")
 	outFile.SetCellValue("Лист1", "D1", "Номер дома")
 	outFile.SetCellValue("Лист1", "E1", "Номер квартиры")
+	outFile.SetCellValue("Лист1", "F1", "Номер комнаты")
 	outFile.SetCellValue("Лист1", "G1", "ФИО жильцов")
 	outFile.SetCellValue("Лист1", "H1", "собственника")
 	outFile.SetCellValue("Лист1", "i1", "признак прописнного")
 	outFile.SetColWidth("Лист1", "A", "A", 5)
-	outFile.SetColWidth("Лист1", "B", "C", 20)
+	outFile.SetColWidth("Лист1", "B", "C", 21)
 	outFile.SetColWidth("Лист1", "D", "E", 14)
 	outFile.SetColWidth("Лист1", "G", "G", 40)
 	outFile.SetColWidth("Лист1", "H", "I", 19)
@@ -52,8 +53,16 @@ func main() {
 			}
 			outFile.SetCellValue("Лист1", "B"+strconv.Itoa(nstr), adr[0])
 			outFile.SetCellValue("Лист1", "C"+strconv.Itoa(nstr), adr[1])
-			outFile.SetCellValue("Лист1", "D"+strconv.Itoa(nstr), adr[2])
-			outFile.SetCellValue("Лист1", "E"+strconv.Itoa(nstr), adr[3])
+			outFile.SetCellValue("Лист1", "D"+strconv.Itoa(nstr), strings.TrimPrefix(adr[2]," д."))
+			if strings.Contains(adr[3],"ком."){
+				outFile.SetCellValue("Лист1", "F"+strconv.Itoa(nstr), strings.TrimPrefix(adr[3]," ком."))
+			}else{
+				outFile.SetCellValue("Лист1", "E"+strconv.Itoa(nstr), strings.TrimPrefix(adr[3]," кв. "))
+			}
+
+			if len(adr)==5{
+				outFile.SetCellValue("Лист1", "F"+strconv.Itoa(nstr), strings.TrimPrefix(adr[4]," ком."))
+			}
 			outFile.SetCellValue("Лист1", "G"+strconv.Itoa(nstr), sob[i])
 			outFile.SetCellValue("Лист1", "H"+strconv.Itoa(nstr), "1")
 			if itemExists(liv, sob[i]) {
@@ -72,8 +81,16 @@ func main() {
 
 				outFile.SetCellValue("Лист1", "B"+strconv.Itoa(nstr), adr[0])
 				outFile.SetCellValue("Лист1", "C"+strconv.Itoa(nstr), adr[1])
-				outFile.SetCellValue("Лист1", "D"+strconv.Itoa(nstr), adr[2])
-				outFile.SetCellValue("Лист1", "E"+strconv.Itoa(nstr), adr[3])
+				outFile.SetCellValue("Лист1", "D"+strconv.Itoa(nstr), strings.TrimPrefix(adr[2]," д."))
+				if strings.Contains(adr[3],"ком."){
+					outFile.SetCellValue("Лист1", "F"+strconv.Itoa(nstr), strings.TrimPrefix(adr[3]," ком."))
+				}else{
+					outFile.SetCellValue("Лист1", "E"+strconv.Itoa(nstr), strings.TrimPrefix(adr[3]," кв. "))
+				}
+				if len(adr)==5{
+					outFile.SetCellValue("Лист1", "F"+strconv.Itoa(nstr), strings.TrimPrefix(adr[4]," ком."))
+				}
+
 				outFile.SetCellValue("Лист1", "G"+strconv.Itoa(nstr), liv[i])
 				outFile.SetCellValue("Лист1", "I"+strconv.Itoa(nstr), "1")
 				if itemExists(sob, liv[i]) {
